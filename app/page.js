@@ -4,158 +4,285 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [sparkles, setSparkles] = useState([]);
+  const [stars, setStars] = useState([]);
 
   useEffect(() => {
-    const items = Array.from({ length: 35 }, (_, i) => ({
-      id: i,
+    const generatedStars = Array.from({ length: 55 }, (_, index) => ({
+      id: index,
       left: Math.random() * 100,
       top: Math.random() * 100,
-      delay: Math.random() * 4,
-      duration: 2 + Math.random() * 3,
-      size: 2 + Math.random() * 4,
+      size: Math.random() * 4 + 2,
+      delay: Math.random() * 5,
+      duration: Math.random() * 3 + 2,
     }));
 
-    setSparkles(items);
+    setStars(generatedStars);
   }, []);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#fffdf9] via-[#f8eee2] to-[#ead8bd] text-[#4a3a2b]">
+    <main className="relative min-h-screen overflow-hidden bg-[#fffaf4] text-[#4b3a29]">
 
-      {/* ÉTOILES */}
-      <div className="pointer-events-none absolute inset-0">
-        {sparkles.map((sparkle) => (
+      {/* =========================================================
+          FOND
+      ========================================================== */}
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#fffefa_0%,#f8ecdc_48%,#e7d1ad_100%)]" />
+
+      <div className="goldGlow absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full" />
+
+      <div className="absolute left-0 top-0 h-[45vh] w-[45vw] rounded-full bg-white/70 blur-[100px]" />
+
+      <div className="absolute bottom-0 right-0 h-[45vh] w-[45vw] rounded-full bg-[#d9b778]/20 blur-[110px]" />
+
+      {/* =========================================================
+          ÉTOILES
+      ========================================================== */}
+
+      <div className="pointer-events-none absolute inset-0 z-10">
+        {stars.map((star) => (
           <span
-            key={sparkle.id}
-            className="sparkle absolute rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.95)]"
+            key={star.id}
+            className="absolute rounded-full bg-white shadow-[0_0_12px_rgba(255,255,255,1)]"
             style={{
-              left: `${sparkle.left}%`,
-              top: `${sparkle.top}%`,
-              width: `${sparkle.size}px`,
-              height: `${sparkle.size}px`,
-              animationDelay: `${sparkle.delay}s`,
-              animationDuration: `${sparkle.duration}s`,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              animation: `twinkle ${star.duration}s ease-in-out ${star.delay}s infinite`,
             }}
           />
         ))}
       </div>
 
-      {/* HALOS LUMINEUX */}
-      <div className="pointer-events-none absolute -left-32 top-20 h-80 w-80 rounded-full bg-white/60 blur-3xl" />
-      <div className="pointer-events-none absolute -right-32 bottom-20 h-96 w-96 rounded-full bg-[#d7b77d]/30 blur-3xl" />
+      {/* =========================================================
+          GRANDES FLEURS
+      ========================================================== */}
 
-      {/* ROSE GAUCHE */}
-      <div className="rose rose-left pointer-events-none absolute left-[-55px] top-[12%] z-10 text-[130px] sm:left-[-30px] sm:text-[170px]">
-        🌹
+      <div className="flower flower-left flower-white">
+        <div className="petal p1" />
+        <div className="petal p2" />
+        <div className="petal p3" />
+        <div className="petal p4" />
+        <div className="petal p5" />
+        <div className="flower-center" />
       </div>
 
-      {/* ROSE DROITE */}
-      <div className="rose rose-right pointer-events-none absolute right-[-55px] top-[20%] z-10 rotate-12 text-[130px] sm:right-[-30px] sm:text-[170px]">
-        🌹
+      <div className="flower flower-left flower-champagne flower-small">
+        <div className="petal p1" />
+        <div className="petal p2" />
+        <div className="petal p3" />
+        <div className="petal p4" />
+        <div className="petal p5" />
+        <div className="flower-center" />
       </div>
 
-      {/* ROSES BAS */}
-      <div className="rose rose-bottom-left pointer-events-none absolute bottom-[-35px] left-[-35px] z-10 rotate-[-15deg] text-[120px] sm:text-[160px]">
-        🌹
+      <div className="flower flower-right flower-white flower-large">
+        <div className="petal p1" />
+        <div className="petal p2" />
+        <div className="petal p3" />
+        <div className="petal p4" />
+        <div className="petal p5" />
+        <div className="flower-center" />
       </div>
 
-      <div className="rose rose-bottom-right pointer-events-none absolute bottom-[-35px] right-[-35px] z-10 rotate-12 text-[120px] sm:text-[160px]">
-        🌹
+      <div className="flower flower-right flower-champagne flower-small">
+        <div className="petal p1" />
+        <div className="petal p2" />
+        <div className="petal p3" />
+        <div className="petal p4" />
+        <div className="petal p5" />
+        <div className="flower-center" />
       </div>
 
-      {/* CONTENU */}
-      <div className="relative z-20 flex min-h-screen items-center justify-center px-5 py-10">
+      {/* =========================================================
+          CONTENU PRINCIPAL
+      ========================================================== */}
 
-        <div className="w-full max-w-2xl text-center">
+      <section className="relative z-30 flex min-h-screen w-full items-center justify-center px-6 py-12">
 
-          {/* PETIT ORNEMENT */}
-          <div className="mb-5 flex items-center justify-center gap-4">
-            <span className="h-px w-16 bg-[#b08a52]" />
-            <span className="text-2xl text-[#b08a52]">✦</span>
-            <span className="h-px w-16 bg-[#b08a52]" />
+        <div className="flex w-full max-w-6xl flex-col items-center justify-center text-center">
+
+          {/* ORNEMENT HAUT */}
+
+          <div className="mb-7 flex w-full max-w-xl items-center justify-center gap-5">
+            <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#c9a45d] to-[#c9a45d]" />
+
+            <span className="text-3xl text-[#c49a4c]">✦</span>
+
+            <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#c9a45d] to-[#c9a45d]" />
           </div>
 
-          <p className="text-sm font-semibold uppercase tracking-[0.45em] text-[#9b7745]">
+          {/* NOMS */}
+
+          <p className="text-base font-semibold uppercase tracking-[0.55em] text-[#9d7843] sm:text-xl">
             KADER & MARIAME
           </p>
 
-          <h1 className="mt-5 font-serif text-5xl font-medium leading-tight text-[#594532] sm:text-7xl">
+          {/* TITRE */}
+
+          <h1 className="mt-7 max-w-5xl font-serif text-5xl font-medium leading-[1.05] text-[#4e3a28] sm:text-7xl md:text-8xl lg:text-9xl">
             Bienvenue
             <br />
-            <span className="text-[#a27b43]">dans nos souvenirs</span>
+
+            <span className="goldText">
+              dans nos souvenirs
+            </span>
           </h1>
 
-          <div className="mx-auto mt-6 flex items-center justify-center gap-5">
-            <span className="h-px w-20 bg-[#c5a66e]" />
+          {/* ALLIANCES */}
 
-            {/* ALLIANCES */}
-            <div className="rings flex items-center justify-center">
-              <span className="ring ring-one" />
-              <span className="ring ring-two" />
-            </div>
+          <div className="relative mt-10 h-28 w-48">
 
-            <span className="h-px w-20 bg-[#c5a66e]" />
+            <div className="ring ring-left" />
+            <div className="ring ring-right" />
+
+            <div className="diamond diamond-left" />
+            <div className="diamond diamond-right" />
+
           </div>
 
-          <p className="mt-6 text-xl font-medium tracking-wide text-[#8b7355]">
-            29 août 2026
-          </p>
+          {/* DATE */}
 
-          <p className="mx-auto mt-5 max-w-lg text-base leading-7 text-[#756454] sm:text-lg">
-            Partagez avec nous les photos prises pendant cette
+          <div className="mt-4">
+
+            <div className="flex items-center justify-center gap-5">
+              <span className="h-px w-16 bg-[#c8a45d]" />
+
+              <p className="text-xl font-medium tracking-[0.25em] text-[#967447] sm:text-2xl">
+                29 AOÛT 2026
+              </p>
+
+              <span className="h-px w-16 bg-[#c8a45d]" />
+            </div>
+
+          </div>
+
+          {/* DESCRIPTION */}
+
+          <p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-[#766554] sm:text-lg md:text-xl">
+            Vous êtes invités à partager avec nous les photos de cette
+            merveilleuse journée.
             <br className="hidden sm:block" />
-            merveilleuse journée et créons ensemble nos plus beaux souvenirs. ❤️
+            Ensemble, créons l'album de nos plus beaux souvenirs. ❤️
           </p>
 
           {/* BOUTONS */}
-          <div className="mx-auto mt-9 flex w-full max-w-md flex-col gap-4">
+
+          <div className="mt-10 flex w-full max-w-xl flex-col gap-4 sm:flex-row">
 
             <Link
               href="/upload"
-              className="group rounded-full bg-[#b08a52] px-7 py-4 text-base font-semibold tracking-wide text-white shadow-[0_10px_30px_rgba(130,95,45,0.25)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#9d753c] hover:shadow-[0_15px_35px_rgba(130,95,45,0.35)]"
+              className="goldButton flex flex-1 items-center justify-center gap-3 rounded-full px-7 py-5 text-base font-bold tracking-wide text-white transition-all duration-300 hover:-translate-y-1 sm:text-lg"
             >
-              <span className="mr-2 transition-transform duration-300 group-hover:scale-125">
-                📸
+              <span className="text-2xl">📸</span>
+
+              <span>
+                AJOUTER MES PHOTOS
               </span>
-              AJOUTER MES PHOTOS
             </Link>
 
             <Link
               href="/galerie"
-              className="rounded-full border border-[#cbb58f] bg-white/75 px-7 py-4 text-base font-semibold tracking-wide text-[#80633c] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white"
+              className="galleryButton flex flex-1 items-center justify-center gap-3 rounded-full px-7 py-5 text-base font-bold tracking-wide transition-all duration-300 hover:-translate-y-1 sm:text-lg"
             >
-              💍 VOIR LA GALERIE
+              <span className="text-2xl">💍</span>
+
+              <span>
+                VOIR LA GALERIE
+              </span>
             </Link>
 
           </div>
 
           {/* BAS */}
+
           <div className="mt-10">
-            <p className="text-2xl tracking-[0.3em] text-[#b08a52]">
+
+            <p className="text-2xl tracking-[0.6em] text-[#c09a57]">
               ✦ ✧ ✦
             </p>
 
-            <p className="mt-3 text-xs uppercase tracking-[0.3em] text-[#a18d76]">
+            <p className="mt-3 text-xs font-medium uppercase tracking-[0.35em] text-[#9d8970]">
               Merci de partager notre bonheur
             </p>
+
           </div>
 
         </div>
-      </div>
 
-      {/* ANIMATIONS */}
+      </section>
+
+      {/* =========================================================
+          STYLES
+      ========================================================== */}
+
       <style jsx>{`
-        .sparkle {
-          animation-name: sparkle;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
+
+        /* -----------------------------
+           LUMIÈRE CENTRALE
+        ----------------------------- */
+
+        .goldGlow {
+          background: rgba(207, 168, 96, 0.15);
+          filter: blur(100px);
+          animation: glow 5s ease-in-out infinite;
         }
 
-        @keyframes sparkle {
+        @keyframes glow {
+          0%,
+          100% {
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0.55;
+          }
+
+          50% {
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 0.9;
+          }
+        }
+
+        /* -----------------------------
+           TEXTE OR
+        ----------------------------- */
+
+        .goldText {
+          background: linear-gradient(
+            120deg,
+            #8d6836,
+            #d0ad67,
+            #a67b3d,
+            #e0c27f,
+            #8e6837
+          );
+
+          background-size: 300% auto;
+
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+
+          animation: goldMove 6s linear infinite;
+        }
+
+        @keyframes goldMove {
+          0% {
+            background-position: 0% center;
+          }
+
+          100% {
+            background-position: 300% center;
+          }
+        }
+
+        /* -----------------------------
+           ÉTOILES
+        ----------------------------- */
+
+        @keyframes twinkle {
           0%,
           100% {
             opacity: 0.15;
-            transform: scale(0.7);
+            transform: scale(0.5);
           }
 
           50% {
@@ -164,81 +291,358 @@ export default function HomePage() {
           }
         }
 
-        .rose {
-          filter: drop-shadow(0 15px 20px rgba(80, 55, 30, 0.18));
-          animation: roseFloat 5s ease-in-out infinite;
-        }
-
-        .rose-right {
-          animation-delay: 1.5s;
-        }
-
-        .rose-bottom-left {
-          animation-delay: 0.8s;
-        }
-
-        .rose-bottom-right {
-          animation-delay: 2s;
-        }
-
-        @keyframes roseFloat {
-          0%,
-          100% {
-            transform: translateY(0) rotate(0deg);
-          }
-
-          50% {
-            transform: translateY(-12px) rotate(3deg);
-          }
-        }
-
-        .rings {
-          position: relative;
-          width: 70px;
-          height: 48px;
-        }
+        /* -----------------------------
+           ALLIANCES
+        ----------------------------- */
 
         .ring {
           position: absolute;
-          top: 7px;
-          width: 35px;
-          height: 35px;
-          border: 5px solid #c9a45d;
+
+          width: 92px;
+          height: 92px;
+
           border-radius: 50%;
+
+          border: 9px solid #c59a4e;
+
           box-shadow:
-            inset 0 0 5px rgba(255, 255, 255, 0.8),
-            0 0 8px rgba(190, 145, 65, 0.45);
-          animation: ringGlow 2.5s ease-in-out infinite;
+            inset 0 0 8px rgba(255, 255, 255, 0.9),
+            0 0 12px rgba(171, 128, 55, 0.35),
+            0 8px 20px rgba(96, 66, 28, 0.18);
+
+          background: linear-gradient(
+            135deg,
+            #8e672e,
+            #e3c77f,
+            #a97832,
+            #f1d995,
+            #9b702f
+          );
+
+          -webkit-mask:
+            radial-gradient(
+              farthest-side,
+              transparent calc(100% - 9px),
+              #000 calc(100% - 8px)
+            );
+
+          mask:
+            radial-gradient(
+              farthest-side,
+              transparent calc(100% - 9px),
+              #000 calc(100% - 8px)
+            );
+
+          animation: ringFloat 4s ease-in-out infinite;
         }
 
-        .ring-one {
-          left: 6px;
+        .ring-left {
+          left: 20px;
+          top: 15px;
+          transform: rotate(-12deg);
         }
 
-        .ring-two {
-          right: 6px;
-          animation-delay: 0.7s;
+        .ring-right {
+          right: 20px;
+          top: 15px;
+          transform: rotate(12deg);
+          animation-delay: 1s;
         }
 
-        @keyframes ringGlow {
+        @keyframes ringFloat {
           0%,
           100% {
-            transform: translateY(0) rotate(0deg);
-            filter: brightness(1);
+            translate: 0 0;
           }
 
           50% {
-            transform: translateY(-4px) rotate(8deg);
-            filter: brightness(1.35);
+            translate: 0 -8px;
           }
         }
 
-        @media (max-width: 640px) {
-          .sparkle {
-            animation-duration: 3s;
+        /* -----------------------------
+           DIAMANTS
+        ----------------------------- */
+
+        .diamond {
+          position: absolute;
+
+          width: 12px;
+          height: 12px;
+
+          background: #fffaf0;
+
+          transform: rotate(45deg);
+
+          border: 2px solid #d7b86e;
+
+          box-shadow:
+            0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 20px rgba(207, 168, 96, 0.7);
+
+          animation: diamondSparkle 2s ease-in-out infinite;
+        }
+
+        .diamond-left {
+          left: 54px;
+          top: 4px;
+        }
+
+        .diamond-right {
+          right: 54px;
+          top: 4px;
+          animation-delay: 0.8s;
+        }
+
+        @keyframes diamondSparkle {
+          0%,
+          100% {
+            opacity: 0.5;
+            transform: rotate(45deg) scale(0.8);
+          }
+
+          50% {
+            opacity: 1;
+            transform: rotate(45deg) scale(1.3);
           }
         }
+
+        /* -----------------------------
+           FLEURS
+        ----------------------------- */
+
+        .flower {
+          position: absolute;
+
+          width: 260px;
+          height: 260px;
+
+          z-index: 15;
+
+          filter:
+            drop-shadow(0 25px 30px rgba(71, 47, 24, 0.18))
+            drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+
+          animation: flowerFloat 6s ease-in-out infinite;
+        }
+
+        .flower-left {
+          left: -100px;
+          top: 8%;
+        }
+
+        .flower-right {
+          right: -100px;
+          bottom: 8%;
+          animation-delay: 2s;
+        }
+
+        .flower-small {
+          width: 170px;
+          height: 170px;
+        }
+
+        .flower-left.flower-small {
+          left: 5%;
+          top: 70%;
+          animation-delay: 1.5s;
+        }
+
+        .flower-right.flower-small {
+          right: 5%;
+          top: 12%;
+          animation-delay: 2.5s;
+        }
+
+        .petal {
+          position: absolute;
+
+          left: 50%;
+          top: 50%;
+
+          width: 115px;
+          height: 155px;
+
+          transform-origin: center bottom;
+
+          border-radius: 70% 70% 55% 55%;
+
+          background:
+            radial-gradient(
+              ellipse at 35% 25%,
+              rgba(255, 255, 255, 0.98),
+              rgba(249, 241, 226, 0.95) 45%,
+              rgba(220, 200, 169, 0.85)
+            );
+
+          box-shadow:
+            inset 0 0 18px rgba(255, 255, 255, 0.8),
+            0 5px 18px rgba(105, 75, 42, 0.12);
+
+          transform:
+            translate(-50%, -100%)
+            rotate(var(--rotation));
+        }
+
+        .p1 {
+          --rotation: 0deg;
+        }
+
+        .p2 {
+          --rotation: 72deg;
+        }
+
+        .p3 {
+          --rotation: 144deg;
+        }
+
+        .p4 {
+          --rotation: 216deg;
+        }
+
+        .p5 {
+          --rotation: 288deg;
+        }
+
+        .flower-champagne .petal {
+          background:
+            radial-gradient(
+              ellipse at 35% 25%,
+              #fffdf8,
+              #ead9bd 48%,
+              #c7a978
+            );
+        }
+
+        .flower-center {
+          position: absolute;
+
+          left: 50%;
+          top: 50%;
+
+          width: 62px;
+          height: 62px;
+
+          transform: translate(-50%, -50%);
+
+          border-radius: 50%;
+
+          background:
+            radial-gradient(
+              circle at 35% 30%,
+              #fff3c9,
+              #d2a95e 45%,
+              #8e632b
+            );
+
+          box-shadow:
+            0 0 20px rgba(194, 153, 78, 0.45),
+            inset 0 0 12px rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes flowerFloat {
+          0%,
+          100% {
+            transform: translateY(0) rotate(0deg);
+          }
+
+          50% {
+            transform: translateY(-16px) rotate(3deg);
+          }
+        }
+
+        /* -----------------------------
+           BOUTONS
+        ----------------------------- */
+
+        .goldButton {
+          background:
+            linear-gradient(
+              120deg,
+              #8f6935,
+              #c6a15b,
+              #9c7339,
+              #d6b873
+            );
+
+          background-size: 250% auto;
+
+          box-shadow:
+            0 12px 30px rgba(125, 91, 42, 0.25);
+
+          animation: buttonGold 5s linear infinite;
+        }
+
+        @keyframes buttonGold {
+          0% {
+            background-position: 0% center;
+          }
+
+          100% {
+            background-position: 250% center;
+          }
+        }
+
+        .galleryButton {
+          border: 1px solid #cdb47e;
+
+          background: rgba(255, 255, 255, 0.78);
+
+          color: #87683c;
+
+          box-shadow:
+            0 10px 25px rgba(110, 80, 40, 0.08);
+
+          backdrop-filter: blur(10px);
+        }
+
+        /* -----------------------------
+           MOBILE
+        ----------------------------- */
+
+        @media (max-width: 768px) {
+
+          .flower {
+            width: 170px;
+            height: 170px;
+          }
+
+          .flower-left {
+            left: -90px;
+            top: 10%;
+          }
+
+          .flower-right {
+            right: -90px;
+            bottom: 12%;
+          }
+
+          .flower-small {
+            display: none;
+          }
+
+          .petal {
+            width: 75px;
+            height: 105px;
+          }
+
+          .flower-center {
+            width: 42px;
+            height: 42px;
+          }
+
+          .ring {
+            width: 72px;
+            height: 72px;
+          }
+
+          .rings {
+            transform: scale(0.85);
+          }
+        }
+
       `}</style>
+
     </main>
   );
 }
