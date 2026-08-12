@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
 }
@@ -6,68 +10,597 @@ html,
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
   min-height: 100%;
 }
 
 body {
-  background: #fffaf3;
-  color: #3d3328;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-button,
-input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
+  background: #fffaf4;
+  color: #4b392c;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
-.page {
+.wedding-home {
+  position: relative;
   min-height: 100vh;
-  padding: 40px 20px;
-}
-
-.galleryPage {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 50px 20px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 250, 242, 0.95) 40%,
+      rgba(244, 230, 210, 0.98) 100%
+    );
+
+  isolation: isolate;
+}
+
+/* =========================
+   ÉTOILES
+========================= */
+
+.stars,
+.stars::before,
+.stars::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.stars {
+  background-image:
+    radial-gradient(circle, rgba(180, 137, 73, 0.65) 1px, transparent 2px),
+    radial-gradient(circle, rgba(180, 137, 73, 0.35) 1px, transparent 2px);
+
+  background-size: 95px 95px, 145px 145px;
+  background-position: 10px 20px, 50px 70px;
+
+  opacity: 0.5;
+  animation: starMove 12s linear infinite;
+}
+
+.stars::before {
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 2px),
+    radial-gradient(circle, rgba(190, 145, 80, 0.5) 1px, transparent 2px);
+
+  background-size: 180px 180px, 120px 120px;
+  animation: sparkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes starMove {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-25px);
+  }
+}
+
+@keyframes sparkle {
+  from {
+    opacity: 0.3;
+  }
+
+  to {
+    opacity: 0.9;
+  }
+}
+
+/* =========================
+   CONTENU PRINCIPAL
+========================= */
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+
+  width: min(900px, 100%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   text-align: center;
+
+  padding: 70px 25px;
+
+  border: 1px solid rgba(183, 142, 79, 0.3);
+  border-radius: 40px;
+
+  background: rgba(255, 255, 255, 0.55);
+
+  backdrop-filter: blur(7px);
+
+  box-shadow:
+    0 30px 90px rgba(130, 92, 45, 0.15),
+    inset 0 0 50px rgba(255, 255, 255, 0.7);
 }
 
-.eyebrow {
-  margin: 0 0 10px;
-  color: #a38350;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.35em;
-}
+/* =========================
+   TITRE
+========================= */
 
-.galleryPage h1 {
+.small-title {
   margin: 0;
-  font-size: clamp(32px, 5vw, 52px);
+
+  font-size: 13px;
+  letter-spacing: 0.55em;
   font-weight: 600;
+
+  color: #a98248;
 }
 
-.date {
-  margin: 10px 0 30px;
-  color: #8b7355;
-  font-size: 18px;
+.gold-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  width: 260px;
+
+  margin: 25px auto 18px;
+
+  color: #b58a4b;
 }
 
-.galleryPage > p:not(.eyebrow):not(.date) {
-  margin: 0 auto 30px;
-  max-width: 600px;
-  color: #766858;
+.gold-line i {
+  display: block;
+  width: 100px;
+  height: 1px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    #b58a4b,
+    transparent
+  );
+}
+
+.hero-content h1 {
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: clamp(4rem, 10vw, 8rem);
+
+  line-height: 0.9;
+
+  font-weight: 500;
+
+  color: #9a733d;
+
+  text-shadow:
+    0 2px 2px rgba(255, 255, 255, 0.9),
+    0 8px 25px rgba(137, 96, 39, 0.15);
+}
+
+.hero-content h1 span {
+  margin: 12px 0;
+
+  font-family: Georgia, serif;
+
+  font-size: 0.42em;
+
+  font-style: italic;
+
+  color: #b28a52;
+}
+
+/* =========================
+   DATE
+========================= */
+
+.wedding-date {
+  margin: 35px 0 0;
+
+  font-size: clamp(18px, 3vw, 27px);
+
+  letter-spacing: 0.35em;
+
+  color: #7d6243;
+
+  font-weight: 500;
+}
+
+.welcome {
+  margin: 25px 0 0;
+
+  font-family: Georgia, serif;
+
+  font-size: clamp(18px, 3vw, 25px);
+
   line-height: 1.7;
+
+  color: #665344;
 }
 
-img {
-  max-width: 100%;
+/* =========================
+   BOUTONS
+========================= */
+
+.hero-buttons {
+  width: min(600px, 100%);
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 18px;
+
+  margin-top: 45px;
+}
+
+.gold-button,
+.outline-button {
+  min-height: 62px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  border-radius: 999px;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.gold-button {
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #9f7337,
+    #d1a65e,
+    #a97b3c
+  );
+
+  box-shadow:
+    0 12px 30px rgba(157, 112, 51, 0.3);
+}
+
+.outline-button {
+  color: #9b733e;
+
+  border: 1px solid #cba96f;
+
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.gold-button:hover,
+.outline-button:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 18px 35px rgba(132, 92, 42, 0.22);
+}
+
+.gold-button:active,
+.outline-button:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   MESSAGE BAS
+========================= */
+
+.bottom-message {
+  margin: 40px 0 0;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  color: #9a8874;
+}
+
+/* =========================
+   ALLIANCES
+========================= */
+
+.rings {
+  position: absolute;
+
+  z-index: 5;
+
+  top: 9%;
+  right: 9%;
+
+  width: 150px;
+  height: 120px;
+
+  transform: rotate(-15deg);
+
+  animation: ringsFloat 5s ease-in-out infinite;
+}
+
+.ring {
+  position: absolute;
+
+  width: 80px;
+  height: 80px;
+
+  border-radius: 50%;
+
+  border: 13px solid #c49349;
+
+  box-shadow:
+    inset 3px 3px 5px rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(129, 91, 39, 0.25);
+}
+
+.ring-one {
+  left: 5px;
+  top: 25px;
+}
+
+.ring-two {
+  right: 5px;
+  top: 5px;
+}
+
+@keyframes ringsFloat {
+  0%,
+  100% {
+    transform: rotate(-15deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(-10deg) translateY(-12px);
+  }
+}
+
+/* =========================
+   GRANDES ROSES
+========================= */
+
+.flower {
+  position: absolute;
+
+  z-index: 3;
+
+  font-size: 130px;
+
+  filter:
+    drop-shadow(0 15px 25px rgba(100, 70, 40, 0.2));
+
+  animation: flowerFloat 6s ease-in-out infinite;
+}
+
+.flower-left {
+  left: -25px;
+  top: 8%;
+  transform: rotate(-20deg);
+}
+
+.flower-right {
+  right: -25px;
+  top: 18%;
+  transform: rotate(25deg);
+
+  animation-delay: 1.5s;
+}
+
+.flower-bottom-left {
+  left: 2%;
+  bottom: -25px;
+  transform: rotate(20deg);
+
+  animation-delay: 2s;
+}
+
+.flower-bottom-right {
+  right: 2%;
+  bottom: -25px;
+  transform: rotate(-20deg);
+
+  animation-delay: 3s;
+}
+
+@keyframes flowerFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-15deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(-10deg);
+  }
+}
+
+/* =========================
+   PETITS ÉCLATS
+========================= */
+
+.petals span {
+  position: absolute;
+
+  z-index: 4;
+
+  color: #c29a5c;
+
+  font-size: 25px;
+
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.petals span:nth-child(1) {
+  top: 15%;
+  left: 30%;
+}
+
+.petals span:nth-child(2) {
+  top: 28%;
+  right: 30%;
+  animation-delay: 0.5s;
+}
+
+.petals span:nth-child(3) {
+  top: 55%;
+  left: 12%;
+  animation-delay: 1s;
+}
+
+.petals span:nth-child(4) {
+  top: 65%;
+  right: 13%;
+  animation-delay: 1.5s;
+}
+
+.petals span:nth-child(5) {
+  bottom: 18%;
+  left: 28%;
+  animation-delay: 2s;
+}
+
+.petals span:nth-child(6) {
+  bottom: 20%;
+  right: 28%;
+  animation-delay: 2.5s;
+}
+
+.petals span:nth-child(7) {
+  top: 42%;
+  left: 5%;
+  animation-delay: 1.2s;
+}
+
+.petals span:nth-child(8) {
+  top: 43%;
+  right: 5%;
+  animation-delay: 2.2s;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+/* =========================
+   COINS
+========================= */
+
+.corner-decoration {
+  position: absolute;
+
+  z-index: 2;
+
+  color: rgba(170, 126, 64, 0.55);
+
+  font-size: 50px;
+}
+
+.top-left {
+  top: 25px;
+  left: 30px;
+}
+
+.top-right {
+  top: 25px;
+  right: 30px;
+}
+
+.bottom-left {
+  bottom: 25px;
+  left: 30px;
+}
+
+.bottom-right {
+  bottom: 25px;
+  right: 30px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+  .wedding-home {
+    padding: 25px 12px;
+  }
+
+  .hero-content {
+    min-height: 90vh;
+
+    padding: 55px 18px;
+
+    border-radius: 28px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(4rem, 19vw, 6rem);
+  }
+
+  .hero-buttons {
+    grid-template-columns: 1fr;
+
+    width: 100%;
+
+    margin-top: 35px;
+  }
+
+  .flower {
+    font-size: 90px;
+  }
+
+  .rings {
+    top: 3%;
+    right: 1%;
+
+    transform: scale(0.7) rotate(-15deg);
+  }
+
+  .small-title {
+    letter-spacing: 0.35em;
+  }
+
+  .wedding-date {
+    letter-spacing: 0.2em;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-content {
+    padding: 45px 15px;
+  }
+
+  .flower {
+    opacity: 0.7;
+    font-size: 75px;
+  }
+
+  .rings {
+    opacity: 0.8;
+  }
 }
