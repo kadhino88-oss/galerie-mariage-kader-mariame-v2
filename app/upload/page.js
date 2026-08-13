@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 
 const CLOUD_NAME = "qmo1hyww";
-const UPLOAD_PRESET = "Mariage le 29.08.2026";
+const UPLOAD_PRESET = "Mariage 29.08.2026";
 
 const stars = [
   { left: "8%", top: "12%", delay: "0s", size: "3px" },
