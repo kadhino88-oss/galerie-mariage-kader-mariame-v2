@@ -1,16 +1,29 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 
+export const dynamic = "force-dynamic";
+
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const dynamic = "force-dynamic";
-
 export async function GET() {
   try {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+    if (!cloudName || !apiKey || !apiSecret) {
+      return NextResponse.json(
+        {
+          error: "Configuration Cloudinary manquante.",
+        },
+        { status: 500 }
+      );
+    }
+
     const result = await cloudinary.search
       .expression("folder:mariage-kader-mariame")
       .max_results(500)
@@ -20,7 +33,7 @@ export async function GET() {
       resources: result.resources || [],
     });
   } catch (error) {
-    console.error("Erreur Cloudinary :", error);
+    console.error("Erreur API galerie :", error);
 
     return NextResponse.json(
       {
