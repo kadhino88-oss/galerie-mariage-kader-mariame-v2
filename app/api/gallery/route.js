@@ -12,6 +12,7 @@ export async function GET() {
     if (!cloudName || !apiKey || !apiSecret) {
       return NextResponse.json(
         {
+          success: false,
           error: "Variables Cloudinary absentes",
           cloudName: !!cloudName,
           apiKey: !!apiKey,
@@ -28,22 +29,29 @@ export async function GET() {
       secure: true,
     });
 
-    const result = await cloudinary.search
-      .expression("folder:mariage-kader-mariame")
-      .max_results(500)
-      .execute();
+    const result = await cloudinary.api.resources({
+      resource_type: "image",
+      type: "upload",
+      max_results: 500,
+    });
+
+    const resources = (result.resources || []).filter((image) =>
+      image.public_id?.startsWith("mariage-kader-mariame/")
+    );
 
     return NextResponse.json({
       success: true,
-      count: result.resources?.length || 0,
-      resources: result.resources || [],
+      count: resources.length,
+      resources,
     });
   } catch (error) {
     console.error("CLOUDINARY ERROR:", error);
 
     return NextResponse.json(
       {
+        success: false,
         error: error?.message || "Erreur Cloudinary",
+        http_code: error?.http_code || null,
       },
       { status: 500 }
     );
