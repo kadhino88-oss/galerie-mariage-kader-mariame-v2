@@ -1,17 +1,6 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
 
-function signature(params, secret) {
-  const pairs = Object.keys(params)
-    .sort()
-    .map((key) => `${key}=${params[key]}`)
-    .join("&");
-
-  return crypto
-    .createHash("sha1")
-    .update(pairs + secret)
-    .digest("hex");
-}
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
@@ -28,30 +17,22 @@ export async function GET() {
       );
     }
 
-    const timestamp = Math.floor(Date.now() / 1000);
+    const expression = "folder:mariage-kader-mariame";
 
-    const body = {
-      expression: "folder:mariage-kader-mariame",
-      max_results: 500,
-      timestamp,
-    };
-
-    const params = new URLSearchParams({
-      expression: body.expression,
-      max_results: String(body.max_results),
-      timestamp: String(timestamp),
-      api_key: apiKey,
-      signature: signature(body, apiSecret),
-    });
+    const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/resources/search`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${auth}`,
+          "Content-Type": "application/json",
         },
-        body: params,
+        body: JSON.stringify({
+          expression,
+          max_results: 500,
+        }),
         cache: "no-store",
       }
     );
@@ -59,7 +40,7 @@ export async function GET() {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Cloudinary :", data);
+      console.error("Erreur Cloudinary :", data);
 
       return NextResponse.json(
         {
@@ -67,7 +48,7 @@ export async function GET() {
             data?.error?.message ||
             "Erreur lors de la récupération des photos.",
         },
-        { status: 500 }
+        { status: response.status }
       );
     }
 
