@@ -6,108 +6,185 @@ export default function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
-    async function loadImages() {
+    async function loadGallery() {
       try {
-        setLoading(true);
-        setError("");
-
         const response = await fetch("/api/gallery", {
           cache: "no-store",
         });
 
         const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(
-            data?.error || "Impossible de charger les photos."
-          );
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Impossible de charger les images");
         }
 
-        const loadedImages = (data.resources || []).map((image) => ({
-          url: image.secure_url,
-          public_id: image.public_id,
-        }));
-
-        setImages(loadedImages);
+        setImages(data.resources || []);
       } catch (err) {
-        console.error("Erreur galerie :", err);
-        setError("Impossible de charger les photos pour le moment.");
+        console.error("Gallery error:", err);
+        setError(err.message || "Erreur lors du chargement des images");
       } finally {
         setLoading(false);
       }
     }
 
-    loadImages();
+    loadGallery();
   }, []);
+
+  useEffect(() => {
+    function handleKeyboard(event) {
+      if (selectedIndex === null || images.length === 0) return;
+
+      if (event.key === "Escape") {
+        setSelectedIndex(null);
+      }
+
+      if (event.key === "ArrowRight") {
+        setSelectedIndex((current) =>
+          current === images.length - 1 ? 0 : current + 1
+        );
+      }
+
+      if (event.key === "ArrowLeft") {
+        setSelectedIndex((current) =>
+          current === 0 ? images.length - 1 : current - 1
+        );
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyboard);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyboard);
+    };
+  }, [selectedIndex, images.length]);
+
+  useEffect(() => {
+    document.body.style.overflow =
+      selectedIndex !== null ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedIndex]);
 
   if (loading) {
     return (
-      <div className="flex min-h-[300px] items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-5xl">💍</div>
-          <p className="text-[#8b7355]">
-            Chargement de vos souvenirs...
-          </p>
-        </div>
+      <div className="gallery-loading">
+        <div className="gallery-spinner" />
+        <p>Chargement des photos...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex min-h-[300px] items-center justify-center">
-        <div className="rounded-2xl border border-[#eadfce] bg-white/80 p-6 text-center shadow-sm">
-          <div className="mb-3 text-4xl">🤍</div>
-
-          <p className="text-[#8b7355]">{error}</p>
-
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="mt-4 rounded-full bg-[#b08a52] px-6 py-3 font-medium text-white"
-          >
-            Réessayer
-          </button>
-        </div>
+      <div className="gallery-error">
+        <strong>Impossible de charger les photos</strong>
+        <p>{error}</p>
       </div>
     );
   }
 
   if (images.length === 0) {
     return (
-      <div className="flex min-h-[300px] items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-5xl">📸</div>
-
-          <p className="text-lg font-medium text-[#765f46]">
-            Aucun souvenir pour le moment
-          </p>
-
-          <p className="mt-2 text-sm text-[#9a8975]">
-            Soyez les premiers à partager une photo ❤️
-          </p>
-        </div>
+      <div className="gallery-empty">
+        Aucune photo pour le moment.
       </div>
     );
   }
 
+  const selectedImage =
+    selectedIndex !== null ? images[selectedIndex] : null;
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-      {images.map((image) => (
+    <>
+      <div className="photo-grid">
+        {images.map((image, index) => (
+          <button
+            key={image.asset_id || image.public_id || index}
+            type="button"
+            className="photo-card"
+            onClick={() => setSelectedIndex(index)}
+            aria-label={`Ouvrir la photo ${index + 1}`}
+          >
+            <img
+              src={image.secure_url}
+              alt={image.display_name || "Photo du mariage"}
+              loading="lazy"
+            />
+
+            <span className="photo-overlay">
+              Agrandir
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {selectedImage && (
         <div
-          key={image.public_id}
-          className="group overflow-hidden rounded-2xl bg-white shadow-md"
+          className="photo-lightbox"
+          onClick={() => setSelectedIndex(null)}
         >
-          <img
-            src={image.url}
-            alt="Souvenir du mariage de Kader et Mariame"
-            className="aspect-square h-full w-full object-cover transition duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
+          <button
+            type="button"
+            className="lightbox-close"
+            onClick={() => setSelectedIndex(null)}
+            aria-label="Fermer"
+          >
+            ×
+          </button>
+
+          <div className="lightbox-counter">
+            {selectedIndex + 1} / {images.length}
+          </div>
+
+          <button
+            type="button"
+            className="lightbox-arrow lightbox-prev"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedIndex((current) =>
+                current === 0 ? images.length - 1 : current - 1
+              );
+            }}
+            aria-label="Photo précédente"
+          >
+            ‹
+          </button>
+
+          <div
+            className="lightbox-image-container"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <img
+              src={selectedImage.secure_url}
+              alt={
+                selectedImage.display_name ||
+                "Photo du mariage"
+              }
+            />
+          </div>
+
+          <button
+            type="button"
+            className="lightbox-arrow lightbox-next"
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setSelectedIndex((current) =>
+                current === images.length - 1 ? 0 : current + 1
+              );
+            }}
+            aria-label="Photo suivante"
+          >
+            ›
+          </button>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 }
