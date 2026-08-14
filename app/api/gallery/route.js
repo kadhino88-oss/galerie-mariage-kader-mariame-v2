@@ -3,12 +3,6 @@ import { v2 as cloudinary } from "cloudinary";
 
 export const dynamic = "force-dynamic";
 
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 export async function GET() {
   try {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
@@ -18,11 +12,21 @@ export async function GET() {
     if (!cloudName || !apiKey || !apiSecret) {
       return NextResponse.json(
         {
-          error: "Variables Cloudinary manquantes sur Vercel.",
+          error: "Variables Cloudinary absentes",
+          cloudName: !!cloudName,
+          apiKey: !!apiKey,
+          apiSecret: !!apiSecret,
         },
         { status: 500 }
       );
     }
+
+    cloudinary.config({
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: apiSecret,
+      secure: true,
+    });
 
     const result = await cloudinary.search
       .expression("folder:mariage-kader-mariame")
@@ -30,17 +34,16 @@ export async function GET() {
       .execute();
 
     return NextResponse.json({
+      success: true,
+      count: result.resources?.length || 0,
       resources: result.resources || [],
     });
   } catch (error) {
-    console.error("ERREUR CLOUDINARY GALERIE :", error);
+    console.error("CLOUDINARY ERROR:", error);
 
     return NextResponse.json(
       {
-        error:
-          error?.error?.message ||
-          error?.message ||
-          "Impossible de récupérer les photos depuis Cloudinary.",
+        error: error?.message || "Erreur Cloudinary",
       },
       { status: 500 }
     );
